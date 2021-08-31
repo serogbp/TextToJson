@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	<link href="style.css" rel="stylesheet" type="text/css">
+	<script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" 	></script>
+	<script src="jsonConverter.js" defer></script>
+</head>
+
+<body>
+	<div class="textAreaContainer" x-data="userInput()">
+		<textarea x-model="input" x-on:keyup="convertInput()"></textarea>
+		<textarea x-model="convertedInput"></textarea>
+	</div>
+</body>
+
+</html>

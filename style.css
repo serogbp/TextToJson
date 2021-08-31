@@ -1,0 +1,17 @@
+body {
+	background-color: darkblue;
+}
+
+textarea {
+	display: block;
+	height: 20em;
+	width: 100%;
+	margin: 4px;
+}
+
+.textAreaContainer {
+	display: flex;
+	justify-content: space-evenly;
+	/* flex-direction: column; */
+	height: max-content;
+}
