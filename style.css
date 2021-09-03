@@ -7,6 +7,8 @@ textarea {
 	height: 20em;
 	width: 100%;
 	margin: 4px;
+	background-color:dimgrey;
+	color: antiquewhite;
 }
 
 .textAreaContainer {
