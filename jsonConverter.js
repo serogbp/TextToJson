@@ -1,8 +1,3 @@
-function processUserInput(input) {
-	inputProcessed = input
-	Alpine.data('userInput', () => 'j')
-}
-
 const userInput = () => {
 	return {
 		input: '',
@@ -208,56 +203,6 @@ const isSimpleType = (userInput) => /\S+,/.test(userInput);
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-// function getParentObject(list, index) {
-// 	let originalDepth = list[index].depth;
-// 	if (originalDepth == 0) return null;
-
-// 	let children = list[index];
-
-// 	let hierarchy = [];
-// 	let currentDepth = originalDepth;
-
-// 	for (var i = index - 1; i >= 0; i--) {
-// 		if (list[i].depth < currentDepth) {
-// 			hierarchy.push(list[i]);
-// 			currentDepth--;
-// 		}
-// 	}
-
-// 	let parent;
-// 	for (var i = hierarchy.length - 1; i >= 0; i--) {
-
-// 	}
-
-// 	return (parent!=null) ? parent[list[i].object.property] : null;
-// }
-
-// function getParentObject(list, index) {
-// 	let depth = list[index].depth;
-// 	let parent;
-
-// 	let children = list[index];
-
-// 	for (var i = index - 1; i >= 0; i--) {
-// 		// if (list[i].depth < depth) return list[i];
-// 		if (list[i].depth < depth) parent = getParentObject(list, i);
-// 	}
-// 	return (parent!=null) ? parent[children.object.property] : children;
-// }
-
 function getParentObjectChain(list, index, array) {
 	let depth = list[index].depth;
 	let parent;
@@ -276,11 +221,6 @@ function getParentObjectChain(list, index, array) {
 }
 
 function getParentObject(array, parent) {
-	// if (array.length > 0) {
-	// 	parent[array.shift().object.property[0]][getParentObject(array, parent)];
-	// }
-	// return parent;
-
 	let lastObjectName = "";
 	while (array.length > 0) {
 		let object = array.shift();
@@ -294,11 +234,4 @@ function getParentObject(array, parent) {
 	}
 
 	return parent;
-}
-
-function getParentObjects(array) {
-	var parent;
-	for (var i = 0; i > array.length; i++) {
-		// parent =
-	}
 }
