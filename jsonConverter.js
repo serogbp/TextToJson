@@ -11,34 +11,44 @@ const userInput = () => {
 	}
 }
 
+var json = {};
+
 // # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 // Process user input
 // # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 function text2Json(userInput) {
-	var json = {};
+	json = {};
 
 	userInput = getInfoOfEachLine(userInput);
 
 	for (var i = 0; i < userInput.length; i++) {
-		let currentLine = userInput[i];
+		let currentJsonLine = userInput[i];
+		let target;
 
 		let parentArray = getParentArrayOfLine(userInput, i, []);
-		parentArray.pop(); // Remove last item, that is the currentLine
-
-		let parentType;
-		let parentChain;
-
 		if (parentArray.length > 0) {
-			parentType = parentArray[parentArray.length - 1].type;
-			parentChain = getParentChainOfParentArray(parentArray, {});
-		}
 
-		if (parentChain != null) {
-			switch (parentType) {
+			let parentType = parentArray[0].type;
+			parentArray.reverse();
 
+			let parentPath = "";
+			for (let i = 0; i < parentArray.length; i++) {
+				parentPath += parentArray[i].object.name + ".";
 			}
+			parentPath = parentPath.substring(0, parentPath.length - 1);
+
+
+			set(parentPath, currentJsonLine, parentType);
+			// let parentChain = getParentChainOfParentArray(parentArray, json);
+			// console.log(parentChain);
+			// if (parentArray.length == 1) {
+			// 	appendLineToTarget(currentJsonLine, json[parentArray[0].object.name]);
+			// } else {
+			// 	appendLineToParentArray(currentJsonLine, parentArray, json);
+			// }
+
 		} else {
-			appendLineToTarget(currentLine, json);
+			appendLineToTarget(currentJsonLine, json);
 		}
 	}
 	return JSON.stringify(json, undefined, 4);
@@ -93,30 +103,33 @@ function getInfoOfEachLine(userInput) {
 
 function getParentArrayOfLine(lines, currentLineIndex, array) {
 	let currentLine = lines[currentLineIndex];
+	let currentIndentation = currentLine.indentation
 	let parent;
 
 	for (var i = currentLineIndex - 1; i >= 0; i--) {
-		if (lines[i].indentation < currentLine.indentation) {
-			array = getParentArrayOfLine(lines, i, array);
+		if (lines[i].indentation < currentIndentation) {
+			parent = lines[i];
+
+			let indentation = parent.indentation;
+			let type = parent.type;
+			let object = parent.object;
+
+			array.push(new JsonLine({
+				"indentation": indentation,
+				"type": type,
+				"object": object,
+			}));
+
+			currentIndentation = indentation
 		}
 	}
-
-	// array.push((parent != null) ? parent: currentLine);
-
-	let indentation = (parent != null) ? parent.indentation: currentLine.indentation;
-	let type = (parent != null) ? parent.type: currentLine.type;
-	let object = (parent != null) ? parent.object: currentLine.object;
-
-	array.push( new JsonLine({
-		"indentation": indentation,
-		"type": type,
-		"object": object,
-	}));
 
 	return array;
 }
 
 function getParentChainOfParentArray(parentArray, parentChain) {
+	parentArray.reverse();
+
 	let lastParent;
 	while (parentArray.length > 0) {
 		let currentParent = parentArray.shift();
@@ -157,26 +170,94 @@ function getParentChainOfParentArray(parentArray, parentChain) {
 	return parentChain;
 }
 
-function appendLineToTarget(line, target) {
-	if (line instanceof JsonLine) {
-		switch (line.type) {
+function appendLineToTarget(currentJsonLine, target, parentType) {
+	if (currentJsonLine instanceof JsonLine) {
+		switch (currentJsonLine.type) {
 			case TYPE.PROPERTY: {
-				target[line.object.name] = line.object.value;
+				if (parentType == TYPE.OBJECT) {
+					target[currentJsonLine.object.name] = currentJsonLine.object.value;
+				} else if (parentType == TYPE.ARRAY) {
+					target.push({
+						[currentJsonLine.object.name] : currentJsonLine.object.value,
+					});
+				} else {
+					target[currentJsonLine.object.name] = currentJsonLine.object.value;
+				}
 				break;
 			}
 			case TYPE.ARRAY: {
-				target[line.object.name] = [];
+				if (parentType == TYPE.OBJECT) {
+					target[currentJsonLine.object.name] = [];
+				} else if (parentType == TYPE.ARRAY) {
+					let array = [];
+					array.name = currentJsonLine.object.name;
+					target.push(array);
+				} else {
+					target[currentJsonLine.object.name] = [];
+				}
 				break;
 			}
 			case TYPE.OBJECT: {
-				target[line.object.name] = {};
+				if (parentType == TYPE.OBJECT) {
+					target[currentJsonLine.object.name] = {};
+				} else if (parentType == TYPE.ARRAY) {
+					let object = {};
+					object.name = currentJsonLine.object.name;
+					target.push(object);
+				} else {
+					target[currentJsonLine.object.name] = {};
+				}
 				break;
 			}
 			case TYPE.PRIMITIVE: {
-				target.push(line.object.name);
+				if (parentType == TYPE.OBJECT) {
+
+				} else if (parentType == TYPE.ARRAY) {
+					target.push(currentJsonLine.object.name);
+				}
 			}
 		}
 	}
+}
+
+function appendLineToParentArray(currentJsonLine, parentArray, json) {
+	parentArray.reverse();
+
+	let target = parentChain02(parentArray, json);
+	appendLineToTarget(currentJsonLine, target);
+}
+
+function parentChain(parentArray) {
+	let name = parentArray.shift();
+	if (parentArray.length > 0) {
+		return parentArray[parentChain];
+	} else {
+		return name.object.name;
+	}
+}
+
+function parentChain02(parentArray, json) {
+	let parentShift = parentArray.shift();
+	if (parentArray.length > 0) {
+
+		return json[parentShift.object.name][parentChain02(parentArray, json)];
+	} else {
+		return json[parentShift.object.name];
+	}
+}
+
+function set(parentPath, currentJsonLine, parentType) {
+	var jsonReference = json;  // a moving reference to internal objects within obj
+
+	var parentPathFormated = parentPath.split('.');
+
+	for (var i = 0; i < parentPathFormated.length - 1; i++) {
+		var parent = parentPathFormated[i];
+		if (!jsonReference[parent]) jsonReference[parent] = {}
+		jsonReference = jsonReference[parent];
+	}
+
+	appendLineToTarget(currentJsonLine, jsonReference[parentPathFormated[parentPathFormated.length - 1]], parentType);
 }
 
 // # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
