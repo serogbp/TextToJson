@@ -1,4 +1,4 @@
-// alpine.js x-data for both textareas
+// alpine.js x-data for both text areas
 const userInput = () => {
 	return {
 		input: '',
@@ -23,7 +23,6 @@ function text2Json(userInput) {
 
 	for (var i = 0; i < userInput.length; i++) {
 		let currentJsonLine = userInput[i];
-		let target;
 
 		let parentArray = getParentArrayOfLine(userInput, i, []);
 		if (parentArray.length > 0) {
@@ -37,16 +36,7 @@ function text2Json(userInput) {
 			}
 			parentPath = parentPath.substring(0, parentPath.length - 1);
 
-
 			set(parentPath, currentJsonLine, parentType);
-			// let parentChain = getParentChainOfParentArray(parentArray, json);
-			// console.log(parentChain);
-			// if (parentArray.length == 1) {
-			// 	appendLineToTarget(currentJsonLine, json[parentArray[0].object.name]);
-			// } else {
-			// 	appendLineToParentArray(currentJsonLine, parentArray, json);
-			// }
-
 		} else {
 			appendLineToTarget(currentJsonLine, json);
 		}
@@ -56,7 +46,7 @@ function text2Json(userInput) {
 
 // Read user input line by line
 // And return an Array with:
-// - Identation level (number of spaces to the left)
+// - Indentation level (number of spaces to the left)
 // - Object with the information the user input
 function getInfoOfEachLine(userInput) {
 	let array = [];
@@ -127,49 +117,6 @@ function getParentArrayOfLine(lines, currentLineIndex, array) {
 	return array;
 }
 
-function getParentChainOfParentArray(parentArray, parentChain) {
-	parentArray.reverse();
-
-	let lastParent;
-	while (parentArray.length > 0) {
-		let currentParent = parentArray.shift();
-
-		if (lastParent != null) {
-			switch (lastParent.type) {
-				case TYPE.PROPERTY:
-					parentChain[lastParent.object.name][currentParent.object.name] = [currentParent.object.value];
-					break;
-				case TYPE.ARRAY:
-					parentChain[lastParent.object.name][currentParent.object.name] = [];
-					break;
-				case TYPE.OBJECT:
-					parentChain[lastParent.object.name][currentParent.object.name] = {};
-					break;
-				case TYPE.PRIMITIVE:
-					parentChain[lastParent.object.name].push(currentParent.object.name);
-					break;
-			}
-		} else { // First parent
-			switch (currentParent.type) {
-				case TYPE.PROPERTY:
-					parentChain[currentParent.object.name] = [currentParent.object.value];
-					break;
-				case TYPE.ARRAY:
-					parentChain[currentParent.object.name] = [];
-					break;
-				case TYPE.OBJECT:
-					parentChain[currentParent.object.name] = {};
-					break;
-				case TYPE.PRIMITIVE:
-					// TODO ???
-					break;
-			}
-		}
-		lastParent = currentParent;
-	}
-	return parentChain;
-}
-
 function appendLineToTarget(currentJsonLine, target, parentType) {
 	if (currentJsonLine instanceof JsonLine) {
 		switch (currentJsonLine.type) {
@@ -211,7 +158,7 @@ function appendLineToTarget(currentJsonLine, target, parentType) {
 			}
 			case TYPE.PRIMITIVE: {
 				if (parentType == TYPE.OBJECT) {
-
+					// pass
 				} else if (parentType == TYPE.ARRAY) {
 					target.push(currentJsonLine.object.name);
 				}
@@ -220,44 +167,18 @@ function appendLineToTarget(currentJsonLine, target, parentType) {
 	}
 }
 
-function appendLineToParentArray(currentJsonLine, parentArray, json) {
-	parentArray.reverse();
-
-	let target = parentChain02(parentArray, json);
-	appendLineToTarget(currentJsonLine, target);
-}
-
-function parentChain(parentArray) {
-	let name = parentArray.shift();
-	if (parentArray.length > 0) {
-		return parentArray[parentChain];
-	} else {
-		return name.object.name;
-	}
-}
-
-function parentChain02(parentArray, json) {
-	let parentShift = parentArray.shift();
-	if (parentArray.length > 0) {
-
-		return json[parentShift.object.name][parentChain02(parentArray, json)];
-	} else {
-		return json[parentShift.object.name];
-	}
-}
-
 function set(parentPath, currentJsonLine, parentType) {
 	var jsonReference = json;  // a moving reference to internal objects within obj
 
-	var parentPathFormated = parentPath.split('.');
+	var parentPathFormatted = parentPath.split('.');
 
-	for (var i = 0; i < parentPathFormated.length - 1; i++) {
-		var parent = parentPathFormated[i];
+	for (var i = 0; i < parentPathFormatted.length - 1; i++) {
+		var parent = parentPathFormatted[i];
 		if (!jsonReference[parent]) jsonReference[parent] = {}
 		jsonReference = jsonReference[parent];
 	}
 
-	appendLineToTarget(currentJsonLine, jsonReference[parentPathFormated[parentPathFormated.length - 1]], parentType);
+	appendLineToTarget(currentJsonLine, jsonReference[parentPathFormatted[parentPathFormatted.length - 1]], parentType);
 }
 
 // # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
