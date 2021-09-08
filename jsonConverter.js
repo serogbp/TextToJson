@@ -87,19 +87,22 @@ function appendLineToParentTarget(userInput, currentLineIndex) {
 	let parentTarget;
 
 	let parentArray = getParentArrayOfLine(userInput, currentLineIndex, []);
-	let parentType = parentArray[parentArray.length - 1].type;
 
-	// Get parent path in this format a.b.c
-	let parentPath = "";
-	for (let i = 0; i < parentArray.length; i++) {
-		parentPath += parentArray[i].object.name + ".";
+	if (parentArray.length > 0) {
+		let parentType = parentArray[parentArray.length - 1].type;
+
+		// Get parent path in this format a.b.c
+		let parentPath = "";
+		for (let i = 0; i < parentArray.length; i++) {
+			parentPath += parentArray[i].object.name + ".";
+		}
+		// Remove last dot
+		parentPath = parentPath.substring(0, parentPath.length - 1);
+
+		parentTarget = set(parentPath);
+
+		appendLineToTarget(userInput[currentLineIndex], parentTarget, parentType);
 	}
-	// Remove last dot
-	parentPath = parentPath.substring(0, parentPath.length - 1);
-
-	parentTarget = set(parentPath);
-
-	appendLineToTarget(userInput[currentLineIndex], parentTarget, parentType);
 }
 
 // Returns array with the parents of the current line
@@ -140,7 +143,7 @@ function appendLineToTarget(currentJsonLine, target, parentType) {
 					target[currentJsonLine.object.name] = currentJsonLine.object.value;
 				} else if (parentType == TYPE.ARRAY) {
 					target.push({
-						[currentJsonLine.object.name] : currentJsonLine.object.value,
+						[currentJsonLine.object.name]: currentJsonLine.object.value,
 					});
 				} else {
 					target[currentJsonLine.object.name] = currentJsonLine.object.value;
@@ -163,9 +166,8 @@ function appendLineToTarget(currentJsonLine, target, parentType) {
 				if (parentType == TYPE.OBJECT) {
 					target[currentJsonLine.object.name] = {};
 				} else if (parentType == TYPE.ARRAY) {
-					let object = {};
-					object.name = currentJsonLine.object.name;
-					target.push(object);
+					target[currentJsonLine.object.name] = {};
+					target.push(target[currentJsonLine.object.name]);
 				} else {
 					target[currentJsonLine.object.name] = {};
 				}
