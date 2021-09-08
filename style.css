@@ -4,6 +4,8 @@
 	--font-color: #C1C2C1;
 	--textarea-background: #282A36;
 	/* --textarea-background: #353535; */
+	--border-radius: 4px;
+	--border: .2em solid var(--font-color);
 }
 html {
 	height: fill-available;
@@ -12,6 +14,29 @@ body {
 	height: fill-available;
 	margin: 0%;
 	background-color: var(--background);
+
+	font-family: sans-serif;
+}
+
+.navContainer {
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+	grid-template-rows: 1fr;
+	gap: 0px 0px;
+	grid-auto-flow: row;
+	grid-template-areas:
+	". title settings";
+}
+.nav_title { grid-area: title; }
+.nav_settings {
+	grid-area: settings;
+
+	margin: 0 auto;
+	width: 90%;
+
+	display: flex;
+    align-items: center;
+	justify-content: flex-end;
 }
 
 h1 {
@@ -24,13 +49,17 @@ h1 {
 
 }
 
-textarea {
-	width: 90%;
+.textAreaContainer {
+	display: flex;
+	align-items: center;
+}
+
+.jsonTextArea {
 	padding: 0.5em 1em;
 
 	background-color: var(--textarea-background);
 	border: .2em solid var(--font-color);
-	border-radius: 4px;
+	border-radius: var(--border-radius);
 
 	color: var(--font-color);
 	font-family: 'Cascadia Code', monospace;
@@ -38,7 +67,7 @@ textarea {
 
 	white-space: pre;
 	overflow-wrap: normal;
-	
+
 }
 
 textarea:focus {
@@ -46,36 +75,56 @@ textarea:focus {
     border: .2em solid var(--accent);
 }
 
-.textAreaContainer {
-	display: flex;
-	align-items: center;
-}
 
+#settingsDialog {
+	color: var(--accent);
+	border-radius: var(--border-radius);
+	background: var(--background);
+	bottom: 0;
+	left: 0;
+	margin: auto;
+	position: absolute;
+	right: 0;
+	top: 0;
+}
 
 /*
 Diseño movil
 */
-@media only screen and (max-width: 700px) {
+@media only screen and (max-width: 768px) {
 	.textAreaContainer {
 		flex-direction: column;
 	}
 
-	textarea {
+	.jsonTextArea {
+		width: 70%;
 		min-height: 40vh;
 		margin: 1em 0;
+	}
+
+	#settingsDialog {
+		height: 100vh;
+		width: 100vw;
+		border: none;
 	}
 }
 
 /*
 	Diseño Ordenador
 */
-@media only screen and (min-width: 700px) {
+@media only screen and (min-width: 769px) {
 	.textAreaContainer {
 		flex-direction: row;
 	}
 
-	textarea {
+	.jsonTextArea {
+		width: 90%;
 		min-height: 80vh;
 		margin: 0 2em;
+	}
+
+	#settingsDialog {
+		height: 400px;
+		width: 500px;
 	}
 }

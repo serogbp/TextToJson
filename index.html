@@ -5,7 +5,7 @@
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Document</title>
+	<title>Text2Json</title>
 	<link href="style.css" rel="stylesheet" type="text/css">
 
 	<!-- Alpine.js -->
@@ -14,13 +14,35 @@
 	<script src="jsonConverter.js" defer></script>
 </head>
 
-<body>
-	<h1>Text2JSON</h1>
+<body x-data="{showSettings: false}">
+
+	<nav class="navContainer">
+		<div class="nav_title">
+			<h1>Text2JSON</h1>
+		</div>
+		<div class="nav_settings">
+			<button x-on:click="showSettings = true" type="button" name="open-settings">Open</button>
+		</div>
+	</nav>
+
 
 	<div class="textAreaContainer" x-data="userInput()" x-init="convertInput()">
-		<textarea id="userInputTextArea" x-model="input" x-on:keyup="convertInput()"></textarea>
-		<textarea id="jsonTextArea" x-model="convertedInput"></textarea>
+		<textarea class="jsonTextArea" x-model="input" x-on:keyup="convertInput()"></textarea>
+		<textarea class="jsonTextArea" x-model="convertedInput"></textarea>
 	</div>
+
+	<dialog open id="settingsDialog" x-show="showSettings" @click.away="showSettings = false">
+		<h2 x-on:click="showSettings = true">Settings</h2>
+		<label for="indentation-type">Json indentation</label>
+		<select name="indentation-type" id="indentation-type">
+			<option value="\t">Tabulation</option>
+			<option value="spaces">Spaces</option>
+			<option value="hamster">Guinea pig</option>
+		</select>
+		<input type="number" name="spaces" step="1" value="4" min="0" max="100">
+		<button x-on:click="showSettings = false" type="button" name="close-settings">Close</button>
+	</dialog>
+
 </body>
 
 </html>
