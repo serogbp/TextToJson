@@ -1,19 +1,69 @@
+:root {
+	--accent: #FCAF45;
+	--background: #383A59;
+	--font-color: #C1C2C1;
+	--textarea-background: #282A36;
+	/* --textarea-background: #353535; */
+}
+
 body {
-	background-color: darkblue;
+	background-color: var(--background);
+}
+
+h1 {
+	text-align: center;
+	font-family: sans-serif;
+	color: var(--accent);
+
 }
 
 textarea {
-	display: block;
-	height: 20em;
-	width: 100%;
-	margin: 4px;
-	background-color:dimgrey;
-	color: antiquewhite;
+	width: 90%;
+	padding: 0.5em 1em;
+
+	background-color: var(--textarea-background);
+	color: var(--font-color);
+	border: .2em solid var(--font-color);
+	border-radius: 4px;
+	font-family: 'Cascadia Code', monospace;
+}
+
+textarea:focus {
+    outline: none !important;
+    border: .2em solid var(--accent);
 }
 
 .textAreaContainer {
 	display: flex;
-	justify-content: space-evenly;
-	/* flex-direction: column; */
-	height: max-content;
+	align-items: center;
+}
+
+
+/*
+Diseño movil
+*/
+@media only screen and (max-width: 700px) {
+	.textAreaContainer {
+		flex-direction: column;
+	}
+
+	textarea {
+		min-height: 40vh;
+		margin: 1em 0;
+	}
+}
+
+/*
+	Diseño Ordenador
+*/
+@media only screen and (min-width: 700px) {
+	.textAreaContainer {
+		flex-direction: row;
+		/* height: 90vh; */
+	}
+
+	textarea {
+		min-height: 80vh;
+		margin: .5em;
+	}
 }

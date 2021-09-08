@@ -77,7 +77,6 @@ function getInfoOfEachLine(userInput) {
 			}));
 		}
 	}
-	console.log(array);
 	return array;
 }
 
