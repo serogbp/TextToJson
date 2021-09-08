@@ -1,4 +1,4 @@
-// alpine.js x-data for both text areas
+// alpine.js x-data for both textarea
 const userInput = () => {
 	return {
 		input: '',
@@ -11,6 +11,8 @@ const userInput = () => {
 	}
 }
 
+// Stores the user input as an object
+// Later use JSON.stringify to show it in the 2nd textarea
 var json = {};
 
 // # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
@@ -23,23 +25,10 @@ function text2Json(userInput) {
 
 	for (var i = 0; i < userInput.length; i++) {
 		let currentJsonLine = userInput[i];
+		let target = json;
 
-		let parentArray = getParentArrayOfLine(userInput, i, []);
-		if (parentArray.length > 0) {
-
-			let parentType = parentArray[0].type;
-			parentArray.reverse();
-
-			let parentPath = "";
-			for (let i = 0; i < parentArray.length; i++) {
-				parentPath += parentArray[i].object.name + ".";
-			}
-			parentPath = parentPath.substring(0, parentPath.length - 1);
-
-			set(parentPath, currentJsonLine, parentType);
-		} else {
-			appendLineToTarget(currentJsonLine, json);
-		}
+		if (currentJsonLine.indentation > 0) appendLineToParentTarget(userInput, i);
+		else appendLineToTarget(currentJsonLine, target);
 	}
 	return JSON.stringify(json, undefined, 4);
 }
@@ -47,6 +36,7 @@ function text2Json(userInput) {
 // Read user input line by line
 // And return an Array with:
 // - Indentation level (number of spaces to the left)
+// - Type of data (property, array, object or primitive)
 // - Object with the information the user input
 function getInfoOfEachLine(userInput) {
 	let array = [];
@@ -91,6 +81,30 @@ function getInfoOfEachLine(userInput) {
 	return array;
 }
 
+// # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+// Parent functions
+// # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+function appendLineToParentTarget(userInput, currentLineIndex) {
+	let parentTarget;
+
+	let parentArray = getParentArrayOfLine(userInput, currentLineIndex, []);
+	let parentType = parentArray[parentArray.length - 1].type;
+
+	// Get parent path in this format a.b.c
+	let parentPath = "";
+	for (let i = 0; i < parentArray.length; i++) {
+		parentPath += parentArray[i].object.name + ".";
+	}
+	// Remove last dot
+	parentPath = parentPath.substring(0, parentPath.length - 1);
+
+	parentTarget = set(parentPath);
+
+	appendLineToTarget(userInput[currentLineIndex], parentTarget, parentType);
+}
+
+// Returns array with the parents of the current line
+// Sort by descending indentation
 function getParentArrayOfLine(lines, currentLineIndex, array) {
 	let currentLine = lines[currentLineIndex];
 	let currentIndentation = currentLine.indentation
@@ -113,6 +127,8 @@ function getParentArrayOfLine(lines, currentLineIndex, array) {
 			currentIndentation = indentation
 		}
 	}
+
+	array.reverse();
 
 	return array;
 }
@@ -167,7 +183,7 @@ function appendLineToTarget(currentJsonLine, target, parentType) {
 	}
 }
 
-function set(parentPath, currentJsonLine, parentType) {
+function set(parentPath) {
 	var jsonReference = json;  // a moving reference to internal objects within obj
 
 	var parentPathFormatted = parentPath.split('.');
@@ -178,7 +194,7 @@ function set(parentPath, currentJsonLine, parentType) {
 		jsonReference = jsonReference[parent];
 	}
 
-	appendLineToTarget(currentJsonLine, jsonReference[parentPathFormatted[parentPathFormatted.length - 1]], parentType);
+	return jsonReference[parentPathFormatted[parentPathFormatted.length - 1]];pp
 }
 
 // # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
