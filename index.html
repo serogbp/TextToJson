@@ -16,7 +16,8 @@
 
 <body>
 	<h1>Text2JSON</h1>
-	<div class="textAreaContainer" x-data="userInput()">
+
+	<div class="textAreaContainer" x-data="userInput()" x-init="convertInput()">
 		<textarea id="userInputTextArea" x-model="input" x-on:keyup="convertInput()"></textarea>
 		<textarea id="jsonTextArea" x-model="convertedInput"></textarea>
 	</div>

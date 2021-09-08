@@ -193,7 +193,7 @@ function set(parentPath) {
 		jsonReference = jsonReference[parent];
 	}
 
-	return jsonReference[parentPathFormatted[parentPathFormatted.length - 1]];pp
+	return jsonReference[parentPathFormatted[parentPathFormatted.length - 1]];
 }
 
 // # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #

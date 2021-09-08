@@ -5,8 +5,12 @@
 	--textarea-background: #282A36;
 	/* --textarea-background: #353535; */
 }
-
+html {
+	height: fill-available;
+}
 body {
+	height: fill-available;
+	margin: 0%;
 	background-color: var(--background);
 }
 
@@ -15,6 +19,9 @@ h1 {
 	font-family: sans-serif;
 	color: var(--accent);
 
+	margin: 0;
+	padding: 1em;
+
 }
 
 textarea {
@@ -22,10 +29,16 @@ textarea {
 	padding: 0.5em 1em;
 
 	background-color: var(--textarea-background);
-	color: var(--font-color);
 	border: .2em solid var(--font-color);
 	border-radius: 4px;
+
+	color: var(--font-color);
 	font-family: 'Cascadia Code', monospace;
+	font-size: 1.5em;
+
+	white-space: pre;
+	overflow-wrap: normal;
+	
 }
 
 textarea:focus {
@@ -59,11 +72,10 @@ Diseño movil
 @media only screen and (min-width: 700px) {
 	.textAreaContainer {
 		flex-direction: row;
-		/* height: 90vh; */
 	}
 
 	textarea {
 		min-height: 80vh;
-		margin: .5em;
+		margin: 0 2em;
 	}
 }
