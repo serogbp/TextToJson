@@ -5,43 +5,49 @@
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Text2Json</title>
+	<title>Text ➡ Json</title>
 	<link href="style.css" rel="stylesheet" type="text/css">
 
 	<!-- Alpine.js -->
 	<script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js"></script>
 
+	<script src="settings.js" defer></script>
 	<script src="jsonConverter.js" defer></script>
+
+	<!-- Google fonts -->
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
 </head>
 
 <body x-data="{showSettings: false}">
 
 	<nav class="navContainer">
 		<div class="nav_title">
-			<h1>Text2JSON</h1>
+			<h1 class="title">TextToJson</h1>
 		</div>
 		<div class="nav_settings">
-			<button x-on:click="showSettings = true" type="button" name="open-settings">Open</button>
+			<input class="icon"type="image" src="img/settings.svg" x-on:click="showSettings = true">
 		</div>
 	</nav>
 
 
 	<div class="textAreaContainer" x-data="userInput()" x-init="convertInput()">
-		<textarea class="jsonTextArea" x-model="input" x-on:keyup="convertInput()"></textarea>
+		<textarea autofocus class="jsonTextArea" x-model="input" x-on:keyup="convertInput()"></textarea>
 		<textarea class="jsonTextArea" x-model="convertedInput"></textarea>
 	</div>
 
-	<dialog open id="settingsDialog" x-show="showSettings" @click.away="showSettings = false">
+	<div id="settings" x-show="showSettings" @click.away="showSettings = false">
 		<h2 x-on:click="showSettings = true">Settings</h2>
 		<label for="indentation-type">Json indentation</label>
-		<select name="indentation-type" id="indentation-type">
-			<option value="\t">Tabulation</option>
+		<select x-on:change="updateSettings()" name="indentation-type" id="settings_indentationType">
 			<option value="spaces">Spaces</option>
+			<option value="\t">Tabulation</option>
 			<option value="hamster">Guinea pig</option>
 		</select>
-		<input type="number" name="spaces" step="1" value="4" min="0" max="100">
+		<input x-on:change="updateSettings()" id="settings_numberSpaces" type="number" name="spaces" step="1" value="4" min="1" max="50">
 		<button x-on:click="showSettings = false" type="button" name="close-settings">Close</button>
-	</dialog>
+	</div>
 
 </body>
 
