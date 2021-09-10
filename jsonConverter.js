@@ -30,7 +30,8 @@ function text2Json(userInput) {
 		if (currentJsonLine.indentation > 0) appendLineToParentTarget(userInput, i);
 		else appendLineToTarget(currentJsonLine, target);
 	}
-	return JSON.stringify(json, undefined, 4);
+
+	return JSON.stringify(json, undefined, SETTINGS.indentation);
 }
 
 // Read user input line by line
