@@ -42,9 +42,8 @@
 			<p class="title">Settings</p>
 			<label for="indentation-type">Json indentation</label>
 			<select x-on:change="updateSettings()" name="indentation-type" id="settings_indentationType">
-				<option value="spaces">Spaces</option>
 				<option value="\t">Tabulation</option>
-				<option value="hamster">Guinea pig</option>
+				<option value="spaces">Spaces</option>
 			</select>
 			<input x-on:change="updateSettings()" id="settings_numberSpaces" type="number" name="spaces" step="1"
 				value="4" min="1" max="50">
