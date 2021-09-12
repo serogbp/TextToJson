@@ -137,53 +137,48 @@ function getParentArrayOfLine(lines, currentLineIndex, array) {
 }
 
 function appendLineToTarget(currentJsonLine, target, parentType) {
-	if (currentJsonLine instanceof JsonLine) {
-		switch (currentJsonLine.type) {
-			case TYPE.PROPERTY: {
-				if (parentType == TYPE.OBJECT) {
+
+	switch (parentType) {
+		case TYPE.OBJECT:
+			switch (currentJsonLine.type) {
+				case TYPE.PROPERTY:
 					target[currentJsonLine.object.name] = currentJsonLine.object.value;
-				} else if (parentType == TYPE.ARRAY) {
+					break;
+				case TYPE.ARRAY:
+					target[currentJsonLine.object.name] = [];
+					break;
+				case TYPE.OBJECT:
+					target[currentJsonLine.object.name] = {};
+					break;
+				case TYPE.PRIMITIVE:
+					break;
+			}
+			break;
+		case TYPE.ARRAY:
+			switch (currentJsonLine.type) {
+				case TYPE.PROPERTY:
 					target.push({
 						[currentJsonLine.object.name]: currentJsonLine.object.value,
 					});
-				} else {
-					target[currentJsonLine.object.name] = currentJsonLine.object.value;
-				}
-				break;
-			}
-			case TYPE.ARRAY: {
-				if (parentType == TYPE.OBJECT) {
-					target[currentJsonLine.object.name] = [];
-				} else if (parentType == TYPE.ARRAY) {
+					break;
+				case TYPE.ARRAY: {
 					let array = [];
 					array.name = currentJsonLine.object.name;
 					target.push(array);
-				} else {
-					target[currentJsonLine.object.name] = [];
+					break;
 				}
-				break;
-			}
-			case TYPE.OBJECT: {
-				if (parentType == TYPE.OBJECT) {
-					target[currentJsonLine.object.name] = {};
-				} else if (parentType == TYPE.ARRAY) {
+				case TYPE.OBJECT:
 					target[currentJsonLine.object.name] = {};
 					target.push(target[currentJsonLine.object.name]);
-				} else {
-					target[currentJsonLine.object.name] = {};
-				}
-				break;
-			}
-			case TYPE.PRIMITIVE: {
-				if (parentType == TYPE.OBJECT) {
-					// pass
-				} else if (parentType == TYPE.ARRAY) {
+					break;
+				case TYPE.PRIMITIVE:
 					target.push(currentJsonLine.object.name);
-				}
+					break;
 			}
-		}
+			break;
 	}
 }
+
 
 function set(parentPath) {
 	var jsonReference = json;  // a moving reference to internal objects within obj
@@ -210,30 +205,6 @@ class JsonLine {
 	}
 }
 
-class JsonProperty {
-	constructor(input) {
-		this.name = this._getName(input);
-		this.value = this._getValue(input);
-	}
-
-	// e.g. "property = value" => "property"
-	_getName(input) {
-		return regexPropertyName.exec(input)[1].trim();
-	}
-
-	// e.g. "property = value" => "value"
-	// 		"property = 5.5" => 5.5
-	//		"property = True" => true
-	_getValue(input) {
-		input = regexPropertyValue.exec(input)[1].trim();
-
-		if (!isNaN(parseFloat(input))) return parseFloat(input);
-		else if (input.toLowerCase() === 'true') return true;
-		else if (input.toLowerCase() === 'false') return false;
-		else return input;
-	}
-}
-
 class JsonArray {
 	constructor(input) {
 		this.name = this._getName(input);
@@ -254,13 +225,41 @@ class JsonObject {
 	}
 }
 
+class JsonProperty {
+	constructor(input) {
+		this.name = this._getName(input);
+		this.value = this._getValue(input);
+	}
+
+	_getName(input) {
+		return regexPropertyName.exec(input)[1].trim();
+	}
+
+	_getValue(input) {
+		if (regexPropertyValueForcedString.test(input)) {
+			input = regexPropertyValueForcedString.exec(input)[1].trim();
+			return input.toString();
+		} else {
+			input = regexPropertyValue.exec(input)[1].trim();
+			return parseValue(input);
+		}
+	}
+}
+
 class JsonPrimitive {
 	constructor(input) {
 		this.name = this._getName(input);
 	}
 
 	_getName(input) {
-		return regexPrimitive.exec(input)[1].trim();
+		if (regexPrimitiveForceString.test(input)) {
+			input = regexPrimitiveForceString.exec(input)[1].trim();
+			return input.toString();
+		}
+		else {
+			input = regexPrimitive.exec(input)[1].trim();
+			return parseValue(input);
+		}
 	}
 }
 // # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
@@ -311,11 +310,21 @@ const isObject = (userInput) => regexObject.test(userInput);
 
 const isPrimitive = (userInput) => regexPrimitive.test(userInput);
 
-const regexComment = /^\/.*$/;			// e.g. "// This is a comment" => true
-const regexProperty = /\S+\s*=\s*\S+/;	// e.g. "property = value" => true
-const regexArray = /(\S*)\[]/;			// e.g. "someText[]" => true
-const regexObject = /(\S*){}/;			// e.g. "objectName" => true
-const regexPrimitive = /(.+),/;		// e.g. "arrayItem," => true
+const regexComment = /^\/.*$/;				// e.g. "// This is a comment" => true
+const regexProperty = /\S+\s*=\s*\S+/;		// e.g. "property = value" => true
+const regexArray = /(\S*)\[]/;				// e.g. "someText[]" => true
+const regexObject = /(\S*){}/;				// e.g. "objectName" => true
+const regexPrimitive = /(.+),/;				// e.g. "arrayItem," => true
+const regexPrimitiveForceString = /"(.+)",/	// e.g. "\"1\"," => true
 
-const regexPropertyName = /(.*)(=)/;	// e.g. "property = value" => "property"
-const regexPropertyValue = /=(.*)/;		// e.g. "property = value" => "value"
+const regexPropertyName = /(.*)(=)/;				// e.g. "property = value" => "property"
+const regexPropertyValue = /=(.*)/;					// e.g. "property = value" => "value"
+const regexPropertyValueForcedString = /=\s*"(.*)"/;	// e.g. "property = \"true\"" => "true"
+
+function parseValue(input) {
+	if (!isNaN(parseFloat(input))) return parseFloat(input);
+	else if (input.toLowerCase() === 'true') return true;
+	else if (input.toLowerCase() === 'false') return false;
+	else return input;
+}
+
