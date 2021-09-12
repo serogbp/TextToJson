@@ -40,17 +40,24 @@
 
 	<!-- Settings -->
 	<div id="settings" x-show="showSettings" @click.away="showSettings = false">
-		<div id="settings_content">
+		<article id="settings_content">
 			<p class="title">Settings</p>
-			<label for="indentation-type">Json indentation</label>
-			<select x-on:change="updateSettings()" name="indentation-type" id="settings_indentationType">
-				<option value="\t">Tabulation</option>
-				<option value="spaces">Spaces</option>
-			</select>
-			<input x-on:change="updateSettings()" id="settings_numberSpaces" type="number" name="spaces" step="1"
-				value="4" min="1" max="50">
-			<button x-on:click="showSettings = false" type="button" name="close-settings">Close</button>
-		</div>
+
+			<section>
+				<label for="indentation-type">Json indentation</label><br><br>
+				<select x-on:change="updateSettings()" name="indentation-type" id="settings_indentationType">
+					<option value="\t">Tabulation</option>
+					<option value="spaces">Spaces</option>
+				</select>
+				<input x-on:change="updateSettings()" id="settings_numberSpaces" type="number" name="spaces" step="1"value="4" min="1" max="50">
+			</section>
+
+
+
+			<button x-on:click="showSettings = false" type="button" name="close-settings">
+				Close
+			</button>
+		</article>
 	</div>
 
 

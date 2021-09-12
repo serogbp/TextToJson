@@ -7,11 +7,8 @@
 	--border-radius: 4px;
 	--border: .2em solid var(--font-color);
 }
-html {
-	height: fill-available;
-}
+
 body {
-	height: fill-available;
 	margin: 0%;
 	background-color: var(--background);
 
@@ -95,10 +92,8 @@ textarea:focus {
 }
 
 #settings_content {
-		padding: 0 1em;
 		display: flex;
 		flex-direction: column;
-		height: 100%;
 }
 
 #settings_content label {
@@ -107,6 +102,10 @@ textarea:focus {
 	line-height: initial;
 	font-family: 'Fredoka One', sans-serif;
 	padding-bottom: 1em;
+}
+
+#settings_content input, select {
+	padding: .5em;
 }
 
 button {
@@ -139,14 +138,18 @@ Diseño movil
 
 	.jsonTextArea {
 		width: 70%;
-		min-height: 40vh;
+		min-height: 30vh;
 		margin: 1em 0;
 	}
 
 	#settings {
-		height: 100vh;
 		width: 100vw;
 		border: none;
+	}
+
+	#settings_content {
+		padding: 2em;
+		height: 90%;
 	}
 }
 
@@ -162,11 +165,17 @@ Diseño movil
 		width: 90%;
 		min-height: 80vh;
 		margin: 0 2em;
-		font-size: 1.5rem;
+		/* font-size: 1.5rem; */
 	}
 
 	#settings {
+
 		height: 400px;
 		width: 500px;
+	}
+
+	#settings_content {
+		padding: 0 1em;
+		height: 100%;
 	}
 }

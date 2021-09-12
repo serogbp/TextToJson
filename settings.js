@@ -32,7 +32,7 @@ function updateSettings() {
 			break;
 		case 'spaces':
 			settingsIndentationType.value = 'spaces';
-			settingsNumberOfSpaces.style.display = "block";
+			settingsNumberOfSpaces.style.display = "inline";
 			SETTINGS.indentation = parseInt(settingsNumberOfSpaces.value);
 			break;
 	}
