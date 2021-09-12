@@ -11,17 +11,19 @@ const userInput = () => {
 	}
 }
 
-// Stores the user input as an object
-// Later use JSON.stringify to show it in the 2nd textarea
-var json = {};
-
 // # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 // Process user input
 // # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 function text2Json(userInput) {
-	json = {};
-
 	userInput = getInfoOfEachLine(userInput);
+
+	// This line is removed from the userInput array because it's only use to
+	// get type of json (object or array)
+	if (userInput.length > 0) {
+		jsonType = userInput.shift().type;
+		if (jsonType == TYPE.OBJECT) json = {};
+		else if (jsonType == TYPE.ARRAY) json = [];
+	}
 
 	for (var i = 0; i < userInput.length; i++) {
 		let currentJsonLine = userInput[i];
@@ -137,6 +139,8 @@ function getParentArrayOfLine(lines, currentLineIndex, array) {
 }
 
 function appendLineToTarget(currentJsonLine, target, parentType) {
+
+	if (parentType == null) parentType = jsonType;
 
 	switch (parentType) {
 		case TYPE.OBJECT:
@@ -328,3 +332,7 @@ function parseValue(input) {
 	else return input;
 }
 
+// Stores the user input as an object
+// Later use JSON.stringify to show it in the 2nd textarea
+var json = {};
+var jsonType = TYPE.OBJECT;

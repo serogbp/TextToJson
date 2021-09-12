@@ -22,6 +22,7 @@
 
 <body x-data="{showSettings: false}">
 
+	<!-- Nav -->
 	<nav class="navContainer">
 		<div class="nav_title">
 			<h1 class="title">TextToJson</h1>
@@ -31,12 +32,13 @@
 		</div>
 	</nav>
 
-
-	<div class="textAreaContainer" x-data="userInput()" x-init="convertInput()">
+	<!-- TextAreas -->
+	<div class="textAreaContainer" x-data="userInput()">
 		<textarea autofocus class="jsonTextArea" x-model="input" x-on:keyup="convertInput()"></textarea>
 		<textarea class="jsonTextArea" x-model="convertedInput"></textarea>
 	</div>
 
+	<!-- Settings -->
 	<div id="settings" x-show="showSettings" @click.away="showSettings = false">
 		<div id="settings_content">
 			<p class="title">Settings</p>
