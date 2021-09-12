@@ -3,7 +3,6 @@ var SETTINGS_TEMPLATE = {
 }
 var SETTINGS;
 
-var settingsDialog;
 var settingsIndentationType;
 var settingsNumberOfSpaces;
 
@@ -11,11 +10,10 @@ initSettings();
 
 function initSettings() {
 	SETTINGS = JSON.parse(localStorage.getItem('settings')) || SETTINGS_TEMPLATE;
-	settingsDialog = document.getElementById('settings');
 	settingsIndentationType = document.getElementById('settings_indentationType');
 	settingsNumberOfSpaces = document.getElementById('settings_numberSpaces');
 
-	if (SETTINGS.indentation == '\\t') {
+	if (SETTINGS.indentation == '\t'.toString()) {
 		settingsIndentationType.value = '\\t';
 		settingsNumberOfSpaces.style.display = "none";
 	} else {
