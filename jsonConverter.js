@@ -74,7 +74,7 @@ function getInfoOfEachLine(userInput) {
 			}
 
 			array.push(new JsonLine({
-				"indentation": indentation,
+				"indentation": indentation > 0 ? indentation - 1 : indentation,
 				"type": type,
 				"object": object,
 			}));
@@ -172,8 +172,8 @@ function appendLineToTarget(currentJsonLine, target, parentType) {
 					break;
 				}
 				case TYPE.OBJECT:
-					target[currentJsonLine.object.name] = {};
-					target.push(target[currentJsonLine.object.name]);
+					var a = {};
+					target.push(a);
 					break;
 				case TYPE.PRIMITIVE:
 					target.push(currentJsonLine.object.name);
