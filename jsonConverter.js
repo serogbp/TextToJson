@@ -315,7 +315,7 @@ const regexComment = /^\/.*$/;			// e.g. "// This is a comment" => true
 const regexProperty = /\S+\s*=\s*\S+/;	// e.g. "property = value" => true
 const regexArray = /(\S*)\[]/;			// e.g. "someText[]" => true
 const regexObject = /(\S*){}/;			// e.g. "objectName" => true
-const regexPrimitive = /(\S+),/;		// e.g. "arrayItem," => true
+const regexPrimitive = /(.+),/;		// e.g. "arrayItem," => true
 
 const regexPropertyName = /(.*)(=)/;	// e.g. "property = value" => "property"
 const regexPropertyValue = /=(.*)/;		// e.g. "property = value" => "value"
