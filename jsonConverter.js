@@ -87,25 +87,42 @@ function getInfoOfEachLine(userInput) {
 // Parent functions
 // # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 function appendLineToParentTarget(userInput, currentLineIndex) {
-	let parentTarget;
+	let parentTarget; // Reference to the json object to append new JsonLine
+	let parentType;
 
-	let parentArray = getParentArrayOfLine(userInput, currentLineIndex, []);
+	// Get parent Target
+	switch (jsonType) {
+		case TYPE.OBJECT: {
+			let parentArray = getParentArrayOfLine(userInput, currentLineIndex, []);
+			if (parentArray.length > 0) {
+				parentType = parentArray[parentArray.length - 1].type;
 
-	if (parentArray.length > 0) {
-		let parentType = parentArray[parentArray.length - 1].type;
+				// Get parent path in this format a.b.c
+				let parentPath = "";
+				for (let i = 0; i < parentArray.length; i++)
+					parentPath += parentArray[i].object.name + ".";
+				parentPath = parentPath.substring(0, parentPath.length - 1); // Remove last dot
 
-		// Get parent path in this format a.b.c
-		let parentPath = "";
-		for (let i = 0; i < parentArray.length; i++) {
-			parentPath += parentArray[i].object.name + ".";
+				// Get Parent reference
+				var jsonReference = json;
+				var parentPathFormatted = parentPath.split('.');
+				for (var i = 0; i < parentPathFormatted.length - 1; i++) {
+					var parent = parentPathFormatted[i];
+					if (!jsonReference[parent]) jsonReference[parent] = {}
+					jsonReference = jsonReference[parent];
+				}
+				parentTarget = jsonReference[parentPathFormatted[parentPathFormatted.length - 1]];
+
+			}
+			break;
 		}
-		// Remove last dot
-		parentPath = parentPath.substring(0, parentPath.length - 1);
+		case TYPE.ARRAY: {
 
-		parentTarget = set(parentPath);
-
-		appendLineToTarget(userInput[currentLineIndex], parentTarget, parentType);
+			break;
+		}
 	}
+
+	appendLineToTarget(userInput[currentLineIndex], parentTarget, parentType);
 }
 
 // Returns array with the parents of the current line
@@ -181,21 +198,6 @@ function appendLineToTarget(currentJsonLine, target, parentType) {
 			}
 			break;
 	}
-}
-
-
-function set(parentPath) {
-	var jsonReference = json;  // a moving reference to internal objects within obj
-
-	var parentPathFormatted = parentPath.split('.');
-
-	for (var i = 0; i < parentPathFormatted.length - 1; i++) {
-		var parent = parentPathFormatted[i];
-		if (!jsonReference[parent]) jsonReference[parent] = {}
-		jsonReference = jsonReference[parent];
-	}
-
-	return jsonReference[parentPathFormatted[parentPathFormatted.length - 1]];
 }
 
 // # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
