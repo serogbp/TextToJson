@@ -11,29 +11,49 @@ const userInput = () => {
 	}
 }
 
+var nameCounter = 0; // Para generar nombres aleatorios
+
 // # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 // Process user input
 // # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 function text2Json(userInput) {
+	// Get array of JsonLine objects
 	userInput = getInfoOfEachLine(userInput);
 
-	// This line is removed from the userInput array because it's only use to
+	// First line is removed from the userInput array because it's used to
 	// get type of json (object or array)
+	// and initialize the json variable
 	if (userInput.length > 0) {
 		jsonType = userInput.shift().type;
 		if (jsonType == TYPE.OBJECT) json = {};
 		else if (jsonType == TYPE.ARRAY) json = [];
 	}
 
-	for (var i = 0; i < userInput.length; i++) {
-		let currentJsonLine = userInput[i];
-		let target = json;
 
-		if (currentJsonLine.indentation > 0) appendLineToParentTarget(userInput, i);
-		else appendLineToTarget(currentJsonLine, target);
+	while (userInput.length > 0) {
+		let jsonReference = json;
+		let type = jsonType;
+		aaa(userInput, jsonReference, type);
+
 	}
 
 	return JSON.stringify(json, undefined, SETTINGS.indentation);
+}
+
+function aaa(userInput, jsonReference, lastLineType) {
+	if (userInput.length > 0) {
+		let line = userInput.shift();
+		let lastJsonReference = jsonReference;
+		jsonReference = appendLineToTarget(line, jsonReference, lastLineType);
+
+		if (userInput[0] && userInput[0].indentation > line.indentation) {
+			aaa(userInput, jsonReference, line.type);
+		}
+
+		if (userInput[0] && userInput[0].indentation == line.indentation) {
+			aaa(userInput, lastJsonReference, lastLineType);
+		}
+	}
 }
 
 // Read user input line by line
@@ -74,7 +94,7 @@ function getInfoOfEachLine(userInput) {
 			}
 
 			array.push(new JsonLine({
-				"indentation": indentation > 0 ? indentation - 1 : indentation,
+				"indentation": indentation,
 				"type": type,
 				"object": object,
 			}));
@@ -164,13 +184,13 @@ function appendLineToTarget(currentJsonLine, target, parentType) {
 			switch (currentJsonLine.type) {
 				case TYPE.PROPERTY:
 					target[currentJsonLine.object.name] = currentJsonLine.object.value;
-					break;
+					return target[currentJsonLine.object.name];
 				case TYPE.ARRAY:
 					target[currentJsonLine.object.name] = [];
-					break;
+					return target[currentJsonLine.object.name];
 				case TYPE.OBJECT:
 					target[currentJsonLine.object.name] = {};
-					break;
+					return target[currentJsonLine.object.name];
 				case TYPE.PRIMITIVE:
 					break;
 			}
@@ -181,20 +201,20 @@ function appendLineToTarget(currentJsonLine, target, parentType) {
 					target.push({
 						[currentJsonLine.object.name]: currentJsonLine.object.value,
 					});
-					break;
+					return target[target.length - 1];
 				case TYPE.ARRAY: {
 					let array = [];
 					array.name = currentJsonLine.object.name;
 					target.push(array);
-					break;
+					return target[target.length - 1];
 				}
 				case TYPE.OBJECT:
 					var a = {};
 					target.push(a);
-					break;
+					return target[target.length - 1];
 				case TYPE.PRIMITIVE:
 					target.push(currentJsonLine.object.name);
-					break;
+					return target[target.length - 1];
 			}
 			break;
 	}
