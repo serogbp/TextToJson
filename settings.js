@@ -38,8 +38,6 @@ function updateSettings() {
 	}
 
 	saveSettings();
-
-	userInput().convertInput();
 }
 
 function saveSettings() {
