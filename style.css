@@ -8,6 +8,10 @@
 	--border: .2em solid var(--font-color);
 }
 
+html {
+	font-size: 62.5%;
+}
+
 body {
 	margin: 0%;
 	background-color: var(--background);
@@ -42,7 +46,7 @@ body {
 }
 
 .title {
-	font-size: 2rem;
+	font-size: 3.2rem;
 	text-align: center;
 	font-weight: 400;
 	font-style: normal;
@@ -102,7 +106,7 @@ textarea:focus {
 }
 
 #settings_content label {
-	font-size: 1.2rem;
+	font-size: 1.6rem;
 	font-weight: 400;
 	font-style: normal;
 	line-height: initial;
@@ -117,11 +121,11 @@ textarea:focus {
 button {
 	background: var(--accent);
 	color: var(--background);
-	padding: 1rem;
+	padding: .5em;
 	border-radius: var(--border-radius);
 	border: none;
 
-	font-size: 1.2rem;
+	font-size: 1.6rem;
 	font-weight: bold;
 	line-height: initial;
 	font-family: 'Fredoka One', sans-serif;
@@ -171,7 +175,7 @@ Mobile
 		width: 90%;
 		min-height: 80vh;
 		margin: 0 2em;
-		font-size: 1.2rem;
+		font-size: 1.6rem;
 	}
 
 	#settings {
@@ -180,7 +184,7 @@ Mobile
 	}
 
 	#settings_content {
-		padding: 0 1em;
+		padding: 0 2em;
 		height: 100%;
 	}
 }
