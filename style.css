@@ -9,7 +9,12 @@
 }
 
 html {
+	box-sizing: border-box;
 	font-size: 62.5%;
+}
+
+*, *:before, *:after {
+	box-sizing: inherit;
 }
 
 body {
@@ -29,18 +34,24 @@ body {
 	"tutorial title settings";
 }
 .nav_title { grid-area: title; }
+
 .nav_tutorial {
 	grid-area: tutorial;
 	justify-content: flex-start;
 }
+.nav_tutorial button::after {
+	content: "Tutorial";
+}
+
 .nav_settings {
 	grid-area: settings;
 	justify-content: flex-end;
 }
+
 .nav_center {
 	margin: 0 auto;
 	width: 90%;
-
+	padding: .5em;
 	display: flex;
     align-items: center;
 }
@@ -78,14 +89,12 @@ body {
 	overflow-wrap: normal;
 
 	tab-size: 2em;
-
 }
 
 textarea:focus {
     outline: none !important;
     border: .2em solid var(--accent);
 }
-
 
 #settings {
 	color: var(--accent);
@@ -118,6 +127,11 @@ textarea:focus {
 	padding: .5em;
 }
 
+#settings_content:last-child button {
+	margin-top: auto;
+	margin-bottom: 1em;
+}
+
 button {
 	background: var(--accent);
 	color: var(--background);
@@ -129,17 +143,27 @@ button {
 	font-weight: bold;
 	line-height: initial;
 	font-family: 'Fredoka One', sans-serif;
-
-	margin-top: auto;
-	margin-bottom: 1em;
-}
-
-.icon {
-	padding: .5em;
 }
 
 /*
-Mobile
+High dpi phone
+And Phone
+*/
+@media only screen and (-moz-min-device-pixel-ratio: 2) and (max-width: 640px),
+only screen and (-o-min-device-pixel-ratio: 2/1) and (max-width: 640px),
+only screen and (-webkit-min-device-pixel-ratio: 2) and (max-width: 640px),
+only screen and (min-device-pixel-ratio: 2) and (max-width: 640px),
+only screen and (max-width: 640px) {
+	.jsonTextArea {
+		font-size: .8rem;
+	}
+
+	.nav_tutorial button::after {
+		content: "T";
+	}
+}
+/*
+Tablet
 */
 @media only screen and (max-width: 768px) {
 	.textAreaContainer {
@@ -147,9 +171,10 @@ Mobile
 	}
 
 	.jsonTextArea {
-		width: 70%;
-		min-height: 30vh;
+		width: 90%;
+		min-height: 37vh;
 		margin: 1em 0;
+
 	}
 
 	#settings {
@@ -175,7 +200,6 @@ Mobile
 		width: 90%;
 		min-height: 80vh;
 		margin: 0 2em;
-		font-size: 1.6rem;
 	}
 
 	#settings {

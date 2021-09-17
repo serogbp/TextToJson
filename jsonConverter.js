@@ -16,7 +16,7 @@ const userInput = () => {
 			let show = false;
 
 			if (this.input != '') {
-				if (window.confirm("Delete your progress?")) {
+				if (window.confirm("Showing the tutorial will delete your progress. Continue?")) {
 					show = true
 				}
 			} else {
