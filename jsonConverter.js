@@ -6,11 +6,28 @@ const userInput = () => {
 	return {
 		input: '',
 		convertedInput: '',
+		showSettings: false,
 
 		convertInput() {
 			this.convertedInput = text2Json(this.input);
 		},
 
+		showTutorial() {
+			let show = false;
+
+			if (this.input != '') {
+				if (window.confirm("Delete your progress?")) {
+					show = true
+				}
+			} else {
+				show = true
+			}
+
+			if (show) {
+				this.input = tutorial;
+				this.convertedInput = text2Json(this.input);
+			}
+		}
 	}
 }
 
@@ -293,3 +310,40 @@ function parseValue(input) {
 // Later use JSON.stringify to show it in the 2nd textarea
 var json = {};
 var jsonType;
+
+var tutorial = `
+// First line indicates if the json is an object or an array
+// {} or [] respectively
+{}
+
+this{}
+ name = TextToJson
+ description = Convert simple text syntax to Json
+ version = 1
+
+
+// To create an object use objectName + {}
+Tutorial{}
+ // Use 1 space to append a son element
+ Compatible_primitives{}
+
+  String = Hello World!
+  Number = 3.14
+  Boolean = true
+
+  // You can force strings with quotes
+  Not_a_number = "2021"
+  Not_a_boolean = "false"
+
+ // To create an Array use arrayName + []
+ awesomeArray[]
+  false,
+  3.14,
+  Hello World,
+  "true",
+  "42",
+  {}
+   description = Nested object
+  []
+   Nested array,
+`

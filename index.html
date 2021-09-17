@@ -21,22 +21,25 @@
 	<script src="jsonConverter.js" defer></script>
 </head>
 
-<body x-data="{showSettings: false}">
+<body x-data="userInput()">
 
 	<!-- Nav -->
 	<nav class="navContainer">
+		<div class="nav_tutorial nav_center">
+			<button x-on:click="showTutorial()">Tutorial</button>
+		</div>
 		<div class="nav_title">
 			<h1 class="title">TextToJson</h1>
 		</div>
-		<div class="nav_settings">
+		<div class="nav_settings nav_center">
 			<input class="icon" type="image" src="img/settings.svg" x-on:click="showSettings = true">
 		</div>
 	</nav>
 
 	<!-- TextAreas -->
-	<div class="textAreaContainer" x-data="userInput()">
-		<textarea autofocus class="jsonTextArea" x-model="input" x-on:keyup="convertInput()"></textarea>
-		<textarea class="jsonTextArea" x-model="convertedInput"></textarea>
+	<div class="textAreaContainer">
+		<textarea autofocus class="jsonTextArea" x-model="input" x-on:keyup="convertInput()" x-on:change="convertInput()"></textarea>
+		<textarea readonly class="jsonTextArea" x-model="convertedInput"></textarea>
 	</div>
 
 	<!-- Settings -->

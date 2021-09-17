@@ -22,18 +22,23 @@ body {
 	gap: 0px 0px;
 	grid-auto-flow: row;
 	grid-template-areas:
-	". title settings";
+	"tutorial title settings";
 }
 .nav_title { grid-area: title; }
+.nav_tutorial {
+	grid-area: tutorial;
+	justify-content: flex-start;
+}
 .nav_settings {
 	grid-area: settings;
-
+	justify-content: flex-end;
+}
+.nav_center {
 	margin: 0 auto;
 	width: 90%;
 
 	display: flex;
     align-items: center;
-	justify-content: flex-end;
 }
 
 .title {
