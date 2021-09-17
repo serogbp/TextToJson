@@ -5,7 +5,27 @@
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>TextToJson</title>
+
+	<!-- Primary Meta Tags -->
+	<title>Text to Json</title>
+	<meta name="title" content="Text to Json">
+	<meta name="description" content="Convert simple syntax text to Json format.">
+
+	<!-- Open Graph / Facebook -->
+	<meta property="og:type" content="website">
+	<meta property="og:url" content="https://metatags.io/">
+	<meta property="og:title" content="Text to Json">
+	<meta property="og:description" content="Convert simple syntax text to Json format.">
+	<meta property="og:image" content="/img/metatag.png">
+
+	<!-- Twitter -->
+	<meta property="twitter:card" content="summary_large_image">
+	<meta property="twitter:url" content="https://metatags.io/">
+	<meta property="twitter:title" content="Text to Json">
+	<meta property="twitter:description" content="Convert simple syntax text to Json format.">
+	<meta property="twitter:image" content="/img/metatag.png">
+
+	<!-- CSS -->
 	<link href="style.css" rel="stylesheet" type="text/css">
 
 	<!-- Google fonts -->
@@ -38,7 +58,8 @@
 
 	<!-- TextAreas -->
 	<div class="textAreaContainer">
-		<textarea autofocus class="jsonTextArea" x-model="input" x-on:keyup="convertInput()" x-on:change="convertInput()"></textarea>
+		<textarea autofocus class="jsonTextArea" x-model="input" x-on:keyup="convertInput()"
+			x-on:change="convertInput()"></textarea>
 		<textarea readonly class="jsonTextArea" x-model="convertedInput"></textarea>
 	</div>
 
@@ -53,7 +74,8 @@
 					<option value="\t">Tabulation</option>
 					<option value="spaces">Spaces</option>
 				</select>
-				<input x-on:change="updateSettings()" id="settings_numberSpaces" type="number" name="spaces" step="1"value="4" min="0" max="10">
+				<input x-on:change="updateSettings()" id="settings_numberSpaces" type="number" name="spaces" step="1"
+					value="4" min="0" max="10">
 			</section>
 
 			<button x-on:click="showSettings = false" type="button" name="close-settings">
@@ -63,4 +85,5 @@
 	</div>
 
 </body>
+
 </html>
