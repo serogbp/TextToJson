@@ -271,7 +271,7 @@ const isArray = (userInput) => regexArray.test(userInput)
 const isObject = (userInput) => regexObject.test(userInput);
 const isPrimitive = (userInput) => regexPrimitive.test(userInput);
 
-const regexComment = /^\/.*$/;				// e.g. "// This is a comment" => true
+const regexComment = /\/.*$/;				// e.g. "// This is a comment" => true
 const regexProperty = /\S+\s*=\s*\S+/;		// e.g. "property = value" => true
 const regexArray = /(\S*)\[]/;				// e.g. "someText[]" => true
 const regexObject = /(\S*){}/;				// e.g. "objectName" => true
