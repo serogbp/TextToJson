@@ -45,7 +45,3 @@ function updateSettings() {
 function saveSettings() {
 	localStorage.setItem('settings', JSON.stringify(this.SETTINGS));
 }
-
-function updateSelect() {
-
-}

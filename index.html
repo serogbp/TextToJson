@@ -8,16 +8,17 @@
 	<title>TextToJson</title>
 	<link href="style.css" rel="stylesheet" type="text/css">
 
-	<!-- Alpine.js -->
-	<script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js"></script>
-
-	<script src="settings.js" defer></script>
-	<script src="jsonConverter.js" defer></script>
-
 	<!-- Google fonts -->
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
+
+	<!-- Alpine.js -->
+	<script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js"></script>
+
+	<!-- My js -->
+	<script src="settings.js" defer></script>
+	<script src="jsonConverter.js" defer></script>
 </head>
 
 <body x-data="{showSettings: false}">
@@ -49,10 +50,8 @@
 					<option value="\t">Tabulation</option>
 					<option value="spaces">Spaces</option>
 				</select>
-				<input x-on:change="updateSettings()" id="settings_numberSpaces" type="number" name="spaces" step="1"value="4" min="1" max="50">
+				<input x-on:change="updateSettings()" id="settings_numberSpaces" type="number" name="spaces" step="1"value="4" min="0" max="10">
 			</section>
-
-
 
 			<button x-on:click="showSettings = false" type="button" name="close-settings">
 				Close
@@ -60,7 +59,5 @@
 		</article>
 	</div>
 
-
 </body>
-
 </html>
