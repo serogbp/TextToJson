@@ -11,6 +11,10 @@
 html {
 	box-sizing: border-box;
 	font-size: 62.5%;
+
+	/* Avoid stretching content on ultra hd monitors */
+	max-width: 1920px;
+	margin: 0 auto;
 }
 
 *, *:before, *:after {
