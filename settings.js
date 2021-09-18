@@ -9,7 +9,7 @@ var settingsNumberOfSpaces;
 initSettings();
 
 function initSettings() {
-	SETTINGS = JSON.parse(localStorage.getItem('settings')) || SETTINGS_TEMPLATE;
+	SETTINGS = JSON.parse(localStorage.getItem('texttojson_settings')) || SETTINGS_TEMPLATE;
 	settingsIndentationType = document.getElementById('settings_indentationType');
 	settingsNumberOfSpaces = document.getElementById('settings_numberSpaces');
 
@@ -41,5 +41,5 @@ function updateSettings() {
 }
 
 function saveSettings() {
-	localStorage.setItem('settings', JSON.stringify(this.SETTINGS));
+	localStorage.setItem('texttojson_settings', JSON.stringify(this.SETTINGS));
 }
